@@ -6,7 +6,7 @@ using System.Windows.Shapes;
 
 namespace AlarmClock
 {
-	public class DrawClock
+	public abstract class DrawClock
 	{
 		protected void DrawClockFrame(Canvas canvas, int tickLength, int tickOffset, double radius, int amountOfTicks, Color color)
 		{
