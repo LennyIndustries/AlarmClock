@@ -7,13 +7,14 @@
         mc:Ignorable="d"
         Title="Lenny Industries: Clock" Height="360" Width="625">
     <Grid>
-        <GroupBox x:Name="groupBox" Header="Alarm" HorizontalAlignment="Left" Margin="10,210,0,0" VerticalAlignment="Top" Height="101" Width="110">
-            <Grid HorizontalAlignment="Left" Height="81" VerticalAlignment="Top" Width="99">
+        <GroupBox x:Name="groupBox" Header="Alarm" HorizontalAlignment="Left" Margin="10,190,0,0" VerticalAlignment="Top" Height="121" Width="110">
+            <Grid HorizontalAlignment="Left" Height="102" VerticalAlignment="Top" Width="99" Margin="0,0,-1,0">
                 <TextBox x:Name="hourTextBox" HorizontalAlignment="Left" Height="23" Margin="55,4,0,0" TextWrapping="Wrap" Text="HH" VerticalAlignment="Top" Width="40"/>
                 <TextBox x:Name="minuteTextBox" HorizontalAlignment="Left" Height="23" Margin="55,30,0,0" TextWrapping="Wrap" Text="MM" VerticalAlignment="Top" Width="40"/>
                 <Label x:Name="hourLabel" Content="hour:" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                 <Label x:Name="minuteLabel" Content="minute:" HorizontalAlignment="Left" Margin="0,26,0,0" VerticalAlignment="Top"/>
                 <Button x:Name="setAlarmButton" Content="Set Alarm" HorizontalAlignment="Left" Margin="0,58,0,0" VerticalAlignment="Top" Width="95" Click="setAlarmButton_Click"/>
+                <CheckBox x:Name="muteCheckBox" Content="Mute" HorizontalAlignment="Left" Margin="0,83,0,0" VerticalAlignment="Top" Width="95"/>
             </Grid>
         </GroupBox>
         <TextBlock x:Name="timeTextBlock" HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top">
@@ -30,11 +31,11 @@
             <Run Text=":"/>
             <Run x:Name="alarmSecondRun" Text="SS"/>
         </TextBlock>
-        <Canvas HorizontalAlignment="Left" Height="110" Margin="10,70,0,0" VerticalAlignment="Top" Width="110" Name="alarmCanvas" Background="#FFE2E2E2" MouseLeftButtonUp="alarmCanvas_MouseLeftButtonUp" ToolTip="Click here to stop the alarm"/>
-        <Canvas HorizontalAlignment="Left" Height="300" Margin="125,10,0,0" VerticalAlignment="Top" Width="300" Name="clockCanvas" Background="#FFE2E2E2"/>
-        <Canvas HorizontalAlignment="Left" Height="90" Margin="440,10,0,0" VerticalAlignment="Top" Width="90" Name="secondsCanvas" Background="#FFE2E2E2"/>
-        <Canvas HorizontalAlignment="Left" Height="90" Margin="440,115,0,0" VerticalAlignment="Top" Width="90" Name="dayCanvas" Background="#FFE2E2E2"/>
-        <Canvas HorizontalAlignment="Left" Height="90" Margin="440,220,0,0" VerticalAlignment="Top" Width="90" Name="monthCanvas" Background="#FFE2E2E2"/>
+        <Canvas HorizontalAlignment="Left" Height="110" Margin="10,70,0,0" VerticalAlignment="Top" Width="110" Name="alarmCanvas" Background="White" MouseLeftButtonUp="alarmCanvas_MouseLeftButtonUp" ToolTip="Click here to stop the alarm"/>
+        <Canvas HorizontalAlignment="Left" Height="300" Margin="125,10,0,0" VerticalAlignment="Top" Width="300" Name="clockCanvas" Background="White"/>
+        <Canvas HorizontalAlignment="Left" Height="90" Margin="440,10,0,0" VerticalAlignment="Top" Width="90" Name="secondsCanvas" Background="White"/>
+        <Canvas HorizontalAlignment="Left" Height="90" Margin="440,115,0,0" VerticalAlignment="Top" Width="90" Name="dayCanvas" Background="White"/>
+        <Canvas HorizontalAlignment="Left" Height="90" Margin="440,220,0,0" VerticalAlignment="Top" Width="90" Name="monthCanvas" Background="White"/>
         <TextBlock x:Name="dayTextBlock" HorizontalAlignment="Left" Margin="535,115,0,0" TextWrapping="Wrap" Text="DAY" VerticalAlignment="Top" Width="70"/>
         <TextBlock x:Name="monthTextBlock" HorizontalAlignment="Left" Margin="535,220,0,0" TextWrapping="Wrap" Text="MONTH" VerticalAlignment="Top" Width="70"/>
 

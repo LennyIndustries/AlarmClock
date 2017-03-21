@@ -10,23 +10,28 @@ namespace AlarmClock
 		private readonly int _amountOfTicks;
 		private readonly double _handLength;
 
-		public Color handColor { get; set; }
-
-		public Clock(Canvas canvas, int tickLength, int tickOffset, double radius, int amountOfTicks, Color color)
+		public Clock(Canvas canvas, int tickLength, double radius, int amountOfTicks, int tickOffset = 0, Color? color = null)
 		{
+			if (color == null)
+			{
+				color = Colors.Black;
+			}
+
 			_canvas = canvas;
 			_amountOfTicks = amountOfTicks;
-			handColor = color;
+			handColor = (Color)color;
 			_handLength = radius - (tickLength + 3);
 
-			DrawClockFrame(canvas, tickLength, tickOffset, radius, amountOfTicks, color);
+			DrawClockFrame(canvas, tickLength, tickOffset, radius, amountOfTicks, (Color)color);
 		}
+
+		public Color handColor { get; set; }
 
 		public void UpdateClock(int tick, string name = "hand", int handOffset = 0)
 		{
 			UIElement line = (UIElement)LogicalTreeHelper.FindLogicalNode(_canvas, name);
 			_canvas.Children.Remove(line);
-			DrawHand(_canvas, _handLength - handOffset, tick, _amountOfTicks, handColor, name);
+			DrawHand(_canvas, _handLength - handOffset, tick, _amountOfTicks, name, handColor);
 		}
 	}
 }

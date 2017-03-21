@@ -15,7 +15,7 @@ namespace AlarmClock
 			DrawCircle(canvas, color, 2.5, true);
 		}
 
-		protected void DrawHand(Canvas canvas, double radius, int tick, int totalTicks, Color color, string name)
+		protected void DrawHand(Canvas canvas, double radius, int tick, int totalTicks, string name, Color color)
 		{
 			double centerY = canvas.Height / 2;
 			double centerX = canvas.Width / 2;

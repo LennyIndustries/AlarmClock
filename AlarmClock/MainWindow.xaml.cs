@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Media;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -16,25 +15,20 @@ namespace AlarmClock
 		private Clock clock, secondsClock, dayClock, monthClock;
 		private Alarm alarm;
 
-		private DispatcherTimer alarmDispatcherTimer;
-		private DispatcherTimer alarmStopDispatcherTimer;
-		private SoundPlayer buzzer;
+		private DispatcherTimer alarmTimer;
+		private DispatcherTimer alarmStopTimer;
 
 		public MainWindow()
 		{
 			InitializeComponent();
 
-			Color color = Colors.Black; 
+			clock = new Clock(clockCanvas, 10, 145, 60, 5);
+			secondsClock = new Clock(secondsCanvas, 5, 42, 60, 2);
+			dayClock = new Clock(dayCanvas, 5, 42, 7);
+			monthClock = new Clock(monthCanvas, 5, 42, 12);
 
-			clock = new Clock(clockCanvas, 10, 5, 145, 60, color);
-			secondsClock = new Clock(secondsCanvas, 5, 2, 42, 60, color);
-			dayClock = new Clock(dayCanvas, 5, 0, 42, 7, color);
-			monthClock = new Clock(monthCanvas, 5, 0, 42, 12, color);
-
-			alarm = new Alarm(alarmCanvas, 5, 2, 52, 60, color);
-			alarm.UpdateAlarm();
-
-			buzzer = new SoundPlayer("Buzzer.wav");
+			alarm = new Alarm(alarmCanvas, 5, 52, 60, 2);
+			alarm.blinkSpeed = 500;
 
 			// Update timer
 			DispatcherTimer updateClockTimer = new DispatcherTimer();
@@ -43,28 +37,36 @@ namespace AlarmClock
 			updateClockTimer.Start();
 
 			// Alarm timer
-			alarmDispatcherTimer = new DispatcherTimer();
-			alarmDispatcherTimer.Tick += AlarmDispatcherTimerOnTick;
-			alarmDispatcherTimer.Interval = TimeSpan.FromMilliseconds(50);
+			alarmTimer = new DispatcherTimer();
+			alarmTimer.Tick += AlarmTimerOnTick;
+			alarmTimer.Interval = TimeSpan.FromMilliseconds(50);
 
 			// Alarm stop timer
-			alarmStopDispatcherTimer = new DispatcherTimer();
-			alarmStopDispatcherTimer.Tick += AlarmStopDispatcherTimerOnTick;
-			alarmStopDispatcherTimer.Interval = TimeSpan.FromSeconds(20);
+			alarmStopTimer = new DispatcherTimer();
+			alarmStopTimer.Tick += AlarmStopTimerOnTick;
+			alarmStopTimer.Interval = TimeSpan.FromSeconds(20);
 		}
 
 		private void PlayAlarm()
 		{
-			alarmStopDispatcherTimer.Start();
-			buzzer.Play();
+			alarmStopTimer.Start();
+
+			if (muteCheckBox.IsChecked == true)
+			{
+				alarm.Start(true);
+			}
+			else
+			{
+				alarm.Start();
+			}
 		}
 
 		private void StopAlarm()
 		{
-			alarmStopDispatcherTimer.Stop();
-			alarmDispatcherTimer.Stop();
+			alarmStopTimer.Stop();
+			alarmTimer.Stop();
 
-			buzzer.Stop();
+			alarm.Stop();
 
 			alarm.handColor = Colors.Black;
 			alarm.UpdateAlarm();
@@ -96,45 +98,57 @@ namespace AlarmClock
 			timeSecondRun.Text = DateTime.Now.ToString("ss");
 		}
 
-		private void AlarmDispatcherTimerOnTick(object sender, EventArgs eventArgs)
+		private void AlarmTimerOnTick(object sender, EventArgs eventArgs)
 		{
-			TimeSpan countdown;
-			countdown = alarm.GetCountdown();
+			var countdown = alarm.GetCountdown();
 			alarmHourRun.Text = countdown.ToString("hh");
 			alarmMinuteRun.Text = countdown.ToString("mm");
 			alarmSecondRun.Text = countdown.ToString("ss");
 
-			if (countdown.Seconds == 0 && countdown.Minutes == 0 && countdown.Hours == 0)
+			if (alarm.CheckAlarm())
 			{
-				alarmDispatcherTimer.Stop();
+				alarmTimer.Stop();
 				PlayAlarm();
 			}
 		}
 
-		private void AlarmStopDispatcherTimerOnTick(object sender, EventArgs e)
+		private void AlarmStopTimerOnTick(object sender, EventArgs e)
 		{
 			StopAlarm();
 		}
 
 		private void setAlarmButton_Click(object sender, RoutedEventArgs e)
 		{
-			int hour = Convert.ToInt32(hourTextBox.Text);
-			int minute = Convert.ToInt32(minuteTextBox.Text);
+			int hour = -1;
+			int minute = -1;
 
-			if (hour < 24 && hour >= 0 && minute < 60 && minute >= 0)
+			try
 			{
-				alarm.hour = hour;
-				alarm.minute = minute;
+				hour = Convert.ToInt32(hourTextBox.Text);
+				minute = Convert.ToInt32(minuteTextBox.Text);
 			}
-			else
+			catch (Exception exception)
 			{
-				MessageBox.Show("Out of bounds; hour between 0 and 23, minute between 0 and 59");
+				Console.WriteLine(exception);
+				MessageBox.Show("Error @ MainWindow.xaml.cs @ Line : 130", "ERROR", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
+			finally
+			{
+				if (hour < 24 && hour >= 0 && minute < 60 && minute >= 0)
+				{
+					alarm.hour = hour;
+					alarm.minute = minute;
 
-			alarmDispatcherTimer.Start();
-			alarm.handColor = Colors.Red;
+					alarmTimer.Start();
+					alarm.handColor = Colors.Aqua;
 
-			alarm.UpdateAlarm();
+					alarm.UpdateAlarm();
+				}
+				else
+				{
+					MessageBox.Show("Out of bounds; hour between 0 and 23, minute between 0 and 59");
+				}
+			}
 		}
 
 		private void alarmCanvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
